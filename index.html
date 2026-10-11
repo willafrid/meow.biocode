@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Био-Код</title>
+
+    <style>
+        @font-face {
+            font-family: 'Manrope';
+            src: url('fonts/Manrope-VariableFont_wght.ttf') format('truetype');
+            font-weight: 100 900;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'Manrope', sans-serif;
+            background: #eef5f0;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            position: relative;
+            background: white;
+            width: 400px;
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-top: 18px;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'Manrope', sans-serif;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 30px;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: #4f8068;
+            color: white;
+            font-size: 17px;
+            font-weight: 600;
+            font-family: 'Manrope', sans-serif;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #47765f;
+        }
+
+        #photoPreview {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        #photoPreview img {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .teamActions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .teamPhotos {
+            margin-top: 15px;
+            padding: 12px 15px;
+            background: #f5f8f6;
+            border-radius: 10px;
+        }
+
+        .teamPhotos p {
+            margin: 7px 0;
+            line-height: 1.5;
+        }
+
+        .teamPhotos strong {
+            display: inline-block;
+            min-width: 90px;
+        }
+
+        .teamHeading {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .teamIcon {
+            width: 32px;
+            height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border-radius: 10px;
+            background: #dceee4;
+            color: #47765f;
+        }
+
+        .teamIcon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .teamActions a,
+        .teamActions button {
+            flex: 1;
+            box-sizing: border-box;
+            margin-top: 0;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .teamActions a {
+            background: #4f8068;
+            color: white;
+            font-weight: bold;
+        }
+
+        .teamActions a:hover {
+            background: #47765f;
+        }
+
+        .teamActions button {
+            background: #eeeeee;
+            color: #333;
+        }
+
+        .teamActions button:hover {
+            background: #dddddd;
+        }
+
+        .copyIcon {
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        /* Заголовок Био-Код */
+
+        .gameHeader {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 35px;
+        }
+
+        .logo {
+            width: 105px;
+            height: 105px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        .gameTitle {
+            flex: 1;
+            text-align: left;
+        }
+
+        .gameTitle h1 {
+            margin: 0 0 6px 0;
+            font-size: 32px;
+            line-height: 1.1;
+        }
+
+        .gameTitle .subtitle {
+            margin: 0;
+            color: #767676;
+            line-height: 1.4;
+        }
+
+        /* Экран игры */
+
+        #gameArea {
+            text-align: center;
+        }
+
+        #playerScreen h1 {
+            text-align: center;
+        }
+
+        #playerScreen .teamHeading {
+            justify-content: center;
+        }
+
+        #playerScreen .teamIcon {
+            width: 52px;
+            height: 52px;
+            border-radius: 16px;
+        }
+
+        #playerScreen .teamIcon svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        #gameArea img {
+            width: 100%;
+            max-height: 480px;
+            object-fit: contain;
+            border-radius: 12px;
+            margin-top: 15px;
+        }
+
+        #gameArea .gameCompleteImage {
+            max-width: 320px;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: 16px;
+        }
+
+        .roundInfo {
+            color: #767676;
+            margin-bottom: 10px;
+        }
+
+        .timer {
+            font-size: 32px;
+            font-weight: 700;
+            margin: 15px 0;
+        }
+
+        /* Мобильная версия */
+
+        @media (max-width: 600px) {
+            #playerScreen,
+            #organizerScreen {
+                width: 100%;
+            }
+
+            .container {
+                width: calc(100% - 30px);
+                box-sizing: border-box;
+                padding: 25px 20px;
+                margin-inline: auto;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .teamActions {
+                flex-direction: column;
+            }
+
+            .teamActions a,
+            .teamActions button {
+                width: 100%;
+            }
+
+            .teamPhotos {
+                padding: 10px;
+            }
+
+            .teamPhotos p {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ЭКРАН ИГРОКА -->
+
+    <div id="playerScreen" style="display: none;">
+        <div class="container">
+
+            <h1 class="teamHeading">
+                <span class="teamIcon" id="teamIcon" aria-hidden="true"></span>
+                <span>Команда <span id="teamNumber"></span></span>
+            </h1>
+
+            <div id="gameArea"></div>
+
+            <button id="startButton" onclick="startGame()">
+                НАЧАТЬ
+            </button>
+
+        </div>
+    </div>
+
+
+    <!-- ЭКРАН ОРГАНИЗАТОРА -->
+
+    <div id="organizerScreen">
+        <div class="container">
+
+            <div class="gameHeader">
+
+                <img src="icons/logo.png" class="logo">
+
+                <div class="gameTitle">
+                    <h1>Био-Код</h1>
+                    <div class="subtitle">
+                        Настрой игру перед началом
+                    </div>
+                </div>
+
+            </div>
+
+            <label for="teams">
+                Количество команд
+            </label>
+
+            <input
+                id="teams"
+                type="number"
+                value="5"
+                min="1"
+            >
+
+
+            <label for="time">
+                Время на одну карточку (секунды)
+            </label>
+
+            <input
+                id="time"
+                type="number"
+                value="60"
+                min="1"
+            >
+
+
+            <label for="rounds">
+                Количество раундов
+            </label>
+
+            <input
+                id="rounds"
+                type="number"
+                value="3"
+                min="1"
+            >
+
+
+            <button onclick="startSetup()">
+                НАЧАТЬ НАСТРОЙКУ
+            </button>
+
+            <div id="result"></div>
+
+        </div>
+    </div>
+
+
+    <script>
+
+        /*
+        ==========================================
+        КАРТОЧКИ
+
+        Если карточек, например, 35:
+        поменяй 40 на 35.
+        ==========================================
+        */
+
+        const photos = [];
+
+        for (let i = 1; i <= 40; i++) {
+            photos.push("photos/" + i + ".jpeg");
+        }
+
+
+        /*
+        ==========================================
+        ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+        ==========================================
+        */
+
+        function shuffle(array) {
+
+            const copy = [...array];
+
+            for (let i = copy.length - 1; i > 0; i--) {
+
+                const j = Math.floor(Math.random() * (i + 1));
+
+                [copy[i], copy[j]] =
+                    [copy[j], copy[i]];
+            }
+
+            return copy;
+        }
+
+
+        function getPhotoNumber(photo) {
+
+            const match =
+                photo.match(/(\d+)\.jpe?g$/i);
+
+            return match
+                ? Number(match[1])
+                : photo;
+        }
+
+
+        const teamIcons = [
+            `<svg viewBox="0 0 24 24" fill="none"><path d="M12 20V11M12 14C7.6 14 5 11.4 5 7C9.4 7 12 9.6 12 14ZM12 11C12 6.6 14.6 4 19 4C19 8.4 16.4 11 12 11Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            `<svg viewBox="0 0 24 24" fill="none"><path d="M5 18C5 10.8 9.1 6.2 18.5 5.5C18.2 14.4 13.8 18.5 5 18ZM5 18C8.2 14.8 11.4 12.3 15.2 9.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            `<svg viewBox="0 0 24 24" fill="none"><path d="M9 4H15M10 4V9L6.5 17.2A2 2 0 0 0 8.3 20H15.7A2 2 0 0 0 17.5 17.2L14 9V4M8.2 15H15.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            `<svg viewBox="0 0 24 24" fill="none"><path d="M8 4C15 7 15 17 8 20M16 4C9 7 9 17 16 20M9.5 7H14.5M8.7 12H15.3M9.5 17H14.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+            `<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="7.5" stroke="currentColor" stroke-width="1.8"/><circle cx="13.5" cy="10.5" r="2.5" stroke="currentColor" stroke-width="1.8"/><path d="M7.5 14.5C9 16.5 11 17.3 13.2 17.2M8.2 8.5H8.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+            `<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="11" r="2.4" stroke="currentColor" stroke-width="1.8"/><path d="M12 8.6C9.2 6 10.7 3.8 12 4.2C13.3 3.8 14.8 6 12 8.6ZM14.4 11C17 8.2 19.2 9.7 18.8 11C19.2 12.3 17 13.8 14.4 11ZM12 13.4C14.8 16 13.3 18.2 12 17.8C10.7 18.2 9.2 16 12 13.4ZM9.6 11C7 13.8 4.8 12.3 5.2 11C4.8 9.7 7 8.2 9.6 11ZM12 17.8V21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            `<svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5C5.7 7.8 8.1 5.5 12 5.5C15.9 5.5 18.3 7.8 19 12.5H5ZM10 12.5V18.5C10 19.3 10.7 20 11.5 20H12.5C13.3 20 14 19.3 14 18.5V12.5M8 9.5H8.1M15.7 8.5H15.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            `<svg viewBox="0 0 24 24" fill="none"><path d="M9 4H13L12 7H10L9 4ZM11 7L15 12M14 11L17 8M15 12C17.8 12 19.5 14 19.5 16.5H8.5M6 20H20M7 13.5C5.4 14.5 4.5 16 4.5 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            `<svg viewBox="0 0 24 24" fill="none"><path d="M12 12C8.5 6 4.5 6 4.5 9.2C4.5 11.8 7 13 12 12ZM12 12C15.5 6 19.5 6 19.5 9.2C19.5 11.8 17 13 12 12ZM12 12V19M9.5 16.5L12 19L14.5 16.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            `<svg viewBox="0 0 24 24" fill="none"><circle cx="7" cy="8" r="2.5" stroke="currentColor" stroke-width="1.8"/><circle cx="17" cy="7" r="2.5" stroke="currentColor" stroke-width="1.8"/><circle cx="15" cy="17" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M9.3 8.8L14.6 7.6M8.6 10L13.5 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+            `<svg viewBox="0 0 24 24" fill="none"><path d="M4 12C7 7.5 12 6.5 17.5 9.5L20 7.5V16.5L17.5 14.5C12 17.5 7 16.5 4 12ZM8 12H8.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            `<svg viewBox="0 0 24 24" fill="none"><path d="M12 4C16.4 4 20 7.6 20 12C20 16.4 16.4 20 12 20C7.6 20 4 16.4 4 12C4 8.5 6.2 6 9 6C11.6 6 13.5 7.8 13.5 10C13.5 12 12.1 13.5 10.5 13.5C9.2 13.5 8.3 12.7 8.3 11.7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`
+        ];
+
+
+        function getTeamIcon(teamNumber) {
+
+            return teamIcons[
+                (teamNumber - 1) % teamIcons.length
+            ];
+        }
+
+
+        function getTeamNumber() {
+
+            const params =
+                new URLSearchParams(window.location.search);
+
+            const team =
+                parseInt(params.get("team"));
+
+            return Number.isInteger(team)
+                ? team
+                : null;
+        }
+
+
+        /*
+        ==========================================
+        РАСПРЕДЕЛЕНИЕ КАРТОЧЕК
+        ==========================================
+        */
+
+        function createRounds(teamCount, roundCount) {
+
+            const cardsPerTeam =
+                photos.length / teamCount;
+
+            /*
+            Один раз перемешиваем карточки и делим их
+            на равные наборы. В каждом следующем раунде
+            команды получают следующий набор по кругу.
+            Так повторы для команды математически невозможны,
+            пока раундов не больше, чем команд.
+            */
+
+            const shuffled = shuffle(photos);
+
+            const cardSets = Array.from(
+                { length: teamCount },
+                (_, setIndex) => {
+
+                    const start =
+                        setIndex * cardsPerTeam;
+
+                    return shuffled.slice(
+                        start,
+                        start + cardsPerTeam
+                    );
+                }
+            );
+
+            const rounds = [];
+
+            for (
+                let round = 0;
+                round < roundCount;
+                round++
+            ) {
+
+                const roundTeams = Array.from(
+                    { length: teamCount },
+                    (_, team) =>
+                        shuffle(
+                            cardSets[
+                                (team + round) % teamCount
+                            ]
+                        )
+                );
+
+                rounds.push(roundTeams);
+            }
+
+            return rounds;
+        }
+
+
+        /*
+        ==========================================
+        НАСТРОЙКА ИГРЫ
+        ==========================================
+        */
+
+        function startSetup() {
+
+            const teamCount =
+                parseInt(
+                    document.getElementById("teams").value
+                );
+
+            const time =
+                parseInt(
+                    document.getElementById("time").value
+                );
+
+            const roundCount =
+                parseInt(
+                    document.getElementById("rounds").value
+                );
+
+
+            if (
+                !Number.isInteger(teamCount) ||
+                teamCount < 1
+            ) {
+
+                alert(
+                    "Введите корректное количество команд."
+                );
+
+                return;
+            }
+
+
+            if (
+                !Number.isInteger(time) ||
+                time < 1
+            ) {
+
+                alert(
+                    "Введите корректное время."
+                );
+
+                return;
+            }
+
+
+            if (
+                !Number.isInteger(roundCount) ||
+                roundCount < 1
+            ) {
+
+                alert(
+                    "Введите корректное количество раундов."
+                );
+
+                return;
+            }
+
+
+            /*
+            Количество карточек должно
+            делиться на количество команд.
+            */
+
+            if (photos.length % teamCount !== 0) {
+
+                alert(
+                    "Количество карточек (" +
+                    photos.length +
+                    ") должно делиться на количество команд (" +
+                    teamCount +
+                    ") без остатка."
+                );
+
+                return;
+            }
+
+
+            /*
+            При нашей схеме одна команда
+            не может играть больше раундов,
+            чем всего команд.
+            */
+
+            if (roundCount > teamCount) {
+
+                alert(
+                    "Количество раундов не может быть больше количества команд."
+                );
+
+                return;
+            }
+
+
+            let roundPhotos;
+
+            try {
+
+                roundPhotos =
+                    createRounds(
+                        teamCount,
+                        roundCount
+                    );
+
+            } catch (error) {
+
+                alert(error.message);
+
+                return;
+            }
+
+
+            /*
+            Сохраняем настройки игры.
+            */
+
+            localStorage.setItem(
+                "gameTeams",
+                teamCount
+            );
+
+            localStorage.setItem(
+                "gameTime",
+                time
+            );
+
+            localStorage.setItem(
+                "gameRounds",
+                roundCount
+            );
+
+            localStorage.setItem(
+                "gamePhotos",
+                JSON.stringify(photos)
+            );
+
+            localStorage.setItem(
+                "gameRoundPhotos",
+                JSON.stringify(roundPhotos)
+            );
+
+
+            showTeamLinks(
+                teamCount,
+                roundPhotos
+            );
+        }
+
+
+        /*
+        ==========================================
+        ССЫЛКИ ДЛЯ КОМАНД
+        ==========================================
+        */
+
+        function showTeamLinks(
+            teamCount,
+            roundPhotos
+        ) {
+
+            const result =
+                document.getElementById("result");
+
+            result.innerHTML = "";
+
+
+            const title =
+                document.createElement("h2");
+
+            title.textContent =
+                "Ссылки для команд";
+
+            result.appendChild(title);
+
+
+            for (
+                let team = 1;
+                team <= teamCount;
+                team++
+            ) {
+
+                const block =
+                    document.createElement("div");
+
+                block.className =
+                    "teamPhotos";
+
+
+                const teamTitle =
+                    document.createElement("h3");
+
+                teamTitle.className =
+                    "teamHeading";
+
+                teamTitle.innerHTML = `
+                    <span class="teamIcon" aria-hidden="true">
+                        ${getTeamIcon(team)}
+                    </span>
+                    <span>Команда ${team}</span>
+                `;
+
+                block.appendChild(teamTitle);
+
+
+                /*
+                Показываем номера карточек
+                по раундам вертикальным списком.
+                */
+
+                for (
+                    let round = 0;
+                    round < roundPhotos.length;
+                    round++
+                ) {
+
+                    const p =
+                        document.createElement("p");
+
+                    const numbers =
+                        roundPhotos[round][team - 1]
+                            .map(getPhotoNumber)
+                            .join(", ");
+
+                    p.innerHTML =
+                        "<strong>Раунд " +
+                        (round + 1) +
+                        ":</strong> " +
+                        numbers;
+
+                    block.appendChild(p);
+                }
+
+
+                /*
+                Формируем командную ссылку.
+                */
+
+                const url =
+                    new URL(window.location.href);
+
+                url.searchParams.set(
+                    "team",
+                    team
+                );
+
+
+                const actions =
+                    document.createElement("div");
+
+                actions.className =
+                    "teamActions";
+
+
+                const openLink =
+                    document.createElement("a");
+
+                openLink.href =
+                    url.toString();
+
+                openLink.target =
+                    "_blank";
+
+                openLink.textContent =
+                    "Открыть";
+
+
+                const copyButton =
+                    document.createElement("button");
+
+                copyButton.type =
+                    "button";
+
+                copyButton.innerHTML =
+                    '<img src="icons/copy.png" class="copyIcon">Копировать';
+
+
+                copyButton.onclick =
+                    async function () {
+
+                        try {
+
+                            await navigator.clipboard.writeText(
+                                url.toString()
+                            );
+
+                            const oldHTML =
+                                copyButton.innerHTML;
+
+                            copyButton.textContent =
+                                "Скопировано ✓";
+
+                            setTimeout(() => {
+
+                                copyButton.innerHTML =
+                                    oldHTML;
+
+                            }, 1200);
+
+                        } catch (error) {
+
+                            /*
+                            Запасной способ для некоторых
+                            браузеров / локальных файлов.
+                            */
+
+                            const textarea =
+                                document.createElement(
+                                    "textarea"
+                                );
+
+                            textarea.value =
+                                url.toString();
+
+                            document.body.appendChild(
+                                textarea
+                            );
+
+                            textarea.select();
+
+                            document.execCommand(
+                                "copy"
+                            );
+
+                            textarea.remove();
+
+                            copyButton.textContent =
+                                "Скопировано ✓";
+
+                            setTimeout(() => {
+
+                                copyButton.innerHTML =
+                                    '<img src="icons/copy.png" class="copyIcon">Копировать';
+
+                            }, 1200);
+                        }
+                    };
+
+
+                actions.appendChild(
+                    openLink
+                );
+
+                actions.appendChild(
+                    copyButton
+                );
+
+                block.appendChild(
+                    actions
+                );
+
+                result.appendChild(
+                    block
+                );
+            }
+        }
+
+
+        /*
+        ==========================================
+        ЭКРАН КОМАНДЫ
+        ==========================================
+        */
+
+        const currentTeam =
+            getTeamNumber();
+
+
+        if (currentTeam !== null) {
+
+            document.getElementById(
+                "organizerScreen"
+            ).style.display = "none";
+
+            document.getElementById(
+                "playerScreen"
+            ).style.display = "block";
+
+            document.getElementById(
+                "teamNumber"
+            ).textContent = currentTeam;
+
+            document.getElementById(
+                "teamIcon"
+            ).innerHTML = getTeamIcon(currentTeam);
+        }
+
+
+        /*
+        ==========================================
+        ИГРА
+        ==========================================
+        */
+
+        let gameCards = [];
+        let currentRound = 0;
+        let currentCard = 0;
+
+        let timerInterval = null;
+        let secondsLeft = 0;
+
+        const gameCompleteHTML = `
+            <div class="gameComplete">
+                <h2>Игра окончена</h2>
+                <img
+                    class="gameCompleteImage"
+                    src="icons/game-finished-cat.jpg"
+                    alt="Довольный кот"
+                >
+            </div>
+        `;
+
+
+        function startGame() {
+
+            const teamNumber =
+                getTeamNumber();
+
+            const teamCount =
+                parseInt(
+                    localStorage.getItem(
+                        "gameTeams"
+                    )
+                );
+
+            const time =
+                parseInt(
+                    localStorage.getItem(
+                        "gameTime"
+                    )
+                );
+
+            const roundCount =
+                parseInt(
+                    localStorage.getItem(
+                        "gameRounds"
+                    )
+                );
+
+            const roundPhotos =
+                JSON.parse(
+                    localStorage.getItem(
+                        "gameRoundPhotos"
+                    ) || "null"
+                );
+
+
+            if (
+                !teamNumber ||
+                !teamCount ||
+                !time ||
+                !roundCount ||
+                !roundPhotos
+            ) {
+
+                document.getElementById(
+                    "gameArea"
+                ).innerHTML =
+                    "<p>Игра ещё не настроена организатором.</p>";
+
+                return;
+            }
+
+
+            if (
+                teamNumber < 1 ||
+                teamNumber > teamCount
+            ) {
+
+                document.getElementById(
+                    "gameArea"
+                ).innerHTML =
+                    "<p>Такой команды нет.</p>";
+
+                return;
+            }
+
+
+            /*
+            Получаем карточки этой команды
+            для каждого раунда.
+            */
+
+            gameCards =
+                roundPhotos.map(
+                    round =>
+                        round[teamNumber - 1]
+                );
+
+
+            currentRound = 0;
+            currentCard = 0;
+
+
+            /*
+            После начала кнопка НАЧАТЬ исчезает.
+            */
+
+            document.getElementById(
+                "startButton"
+            ).style.display = "none";
+
+
+            showCurrentCard();
+        }
+
+
+        /*
+        ==========================================
+        ПОКАЗ КАРТОЧКИ
+        ==========================================
+        */
+
+        function showCurrentCard() {
+
+            clearInterval(timerInterval);
+
+            const area =
+                document.getElementById(
+                    "gameArea"
+                );
+
+
+            if (
+                currentRound >= gameCards.length
+            ) {
+
+                area.innerHTML =
+                    gameCompleteHTML;
+
+                return;
+            }
+
+
+            const cards =
+                gameCards[currentRound];
+
+
+            /*
+            Если карточки текущего раунда закончились,
+            показываем переход к следующему.
+            */
+
+            if (
+                currentCard >= cards.length
+            ) {
+
+                showRoundComplete();
+
+                return;
+            }
+
+
+            const photo =
+                cards[currentCard];
+
+            const photoNumber =
+                getPhotoNumber(photo);
+
+
+            area.innerHTML = `
+                <div class="roundInfo">
+                    Раунд ${currentRound + 1}
+                    из ${gameCards.length}
+                </div>
+
+                <img
+                    src="${photo}"
+                    alt="Карточка ${photoNumber}"
+                >
+
+                <div
+                    class="timer"
+                    id="timer"
+                ></div>
+            `;
+
+
+            startTimer();
+        }
+
+
+        /*
+        ==========================================
+        ТАЙМЕР
+        ==========================================
+        */
+
+        function startTimer() {
+
+            const gameTime =
+                parseInt(
+                    localStorage.getItem(
+                        "gameTime"
+                    )
+                );
+
+            secondsLeft =
+                gameTime;
+
+
+            updateTimer();
+
+
+            timerInterval =
+                setInterval(() => {
+
+                    secondsLeft--;
+
+                    updateTimer();
+
+
+                    if (secondsLeft <= 0) {
+
+                        clearInterval(
+                            timerInterval
+                        );
+
+                        currentCard++;
+
+                        showCurrentCard();
+                    }
+
+                }, 1000);
+        }
+
+
+        function updateTimer() {
+
+            const timer =
+                document.getElementById(
+                    "timer"
+                );
+
+            if (timer) {
+
+                timer.textContent =
+                    secondsLeft;
+            }
+        }
+
+
+        /*
+        ==========================================
+        КОНЕЦ РАУНДА
+        ==========================================
+        */
+
+        function showRoundComplete() {
+
+            clearInterval(
+                timerInterval
+            );
+
+
+            const area =
+                document.getElementById(
+                    "gameArea"
+                );
+
+
+            /*
+            Последний раунд.
+            */
+
+            if (
+                currentRound >=
+                gameCards.length - 1
+            ) {
+
+                area.innerHTML =
+                    gameCompleteHTML;
+
+                return;
+            }
+
+
+            area.innerHTML = `
+                <h2>
+                    Раунд ${currentRound + 1}
+                    завершён
+                </h2>
+
+                <button onclick="nextRound()">
+                    СЛЕДУЮЩИЙ РАУНД
+                </button>
+            `;
+        }
+
+
+        function nextRound() {
+
+            currentRound++;
+            currentCard = 0;
+
+            showCurrentCard();
+        }
+
+    </script>
+
+</body>
+
+</html>
